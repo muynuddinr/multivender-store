@@ -2,8 +2,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { FiShoppingCart, FiUser, FiSearch, FiMenu, FiX, FiShoppingBag, FiPackage } from 'react-icons/fi';
+import { FiShoppingCart, FiUser, FiSearch, FiMenu, FiX, FiShoppingBag, FiPackage, FiLogOut } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '@/context/AuthContext';
+import Image from 'next/image';
 
 // Constants for menu items to avoid repetition
 const NAVIGATION_ITEMS = ['Men', 'Women', 'Kids', 'Sale'];
@@ -53,8 +55,9 @@ const Navbar: React.FC = () => {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [isSearchOpenMobile, setIsSearchOpenMobile] = useState(false);
   const pathname = usePathname();
+  const { user, logout, loading } = useAuth();
 
-  // Handle scroll effect for navbar - optimized with useCallback
+  // Handle scroll effect for navbar
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
@@ -72,192 +75,190 @@ const Navbar: React.FC = () => {
     setIsSearchOpenMobile(false);
   }, [pathname]);
 
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (openDropdown && !(event.target as Element).closest('.dropdown-container')) {
-        setOpenDropdown(null);
-      }
-    };
-    
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [openDropdown]);
+  const toggleDropdown = (name: string) => {
+    setOpenDropdown(openDropdown === name ? null : name);
+  };
 
-  const handleSearch = useCallback((e: React.FormEvent) => {
+  const handleLogout = async () => {
+    await logout();
+    // You could also add router.push('/') here if you want to redirect
+  };
+
+  const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
+    // Handle search logic here
     console.log('Searching for:', searchQuery);
-    // Navigate to search results page
-    setIsSearchOpenMobile(false);
-  }, [searchQuery]);
-
-  const toggleDropdown = useCallback((name: string) => {
-    setOpenDropdown(prev => prev === name ? null : name);
-  }, []);
-
-  // Animation variants for consistent animations
-  const dropdownVariants = {
-    hidden: { opacity: 0, y: 10 },
-    visible: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: 10 }
   };
 
   return (
-    <nav className={`sticky top-0 z-50 transition-all duration-300 ${
-      isScrolled 
-        ? 'bg-white shadow-md' 
-        : 'bg-white/90 backdrop-blur-md'
-    }`}
-    aria-label="Main navigation">
+    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-md py-2' : 'bg-white py-3'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-20 items-center">
-          {/* Logo */}
-          <div className="flex-shrink-0">
-            <Link href="/" className="text-2xl font-serif tracking-wider text-gray-900 hover:text-black transition-colors duration-200 flex items-center">
-              <span className="text-3xl font-bold">lovosis</span>
+        <div className="flex justify-between items-center">
+          {/* Logo and brand */}
+          <div className="flex items-center">
+            <Link href="/" className="font-bold text-xl text-black">
+              STORE
             </Link>
           </div>
 
-          {/* Main navigation - desktop */}
-          <div className="hidden md:flex space-x-10">
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-8">
             {NAVIGATION_ITEMS.map((item) => (
               <Link 
                 key={item} 
                 href={`/${item.toLowerCase()}`} 
-                className={`text-gray-700 hover:text-black group relative uppercase text-sm tracking-wider font-medium ${
-                  pathname === `/${item.toLowerCase()}` ? 'text-black' : ''
+                className={`text-sm font-medium hover:text-black transition-colors duration-200 ${
+                  pathname === `/${item.toLowerCase()}` 
+                    ? 'text-black border-b-2 border-black pb-1' 
+                    : 'text-gray-600'
                 }`}
               >
                 {item}
-                <span className={`absolute -bottom-1 left-0 h-0.5 bg-black transition-all duration-300 ${
-                  pathname === `/${item.toLowerCase()}` ? 'w-full' : 'w-0 group-hover:w-full'
-                }`}></span>
               </Link>
             ))}
           </div>
 
-          {/* Search bar - desktop */}
-          <div className="flex-1 max-w-md mx-6 hidden md:block">
-            <form onSubmit={handleSearch} className="relative group">
-              <input
-                type="search"
-                placeholder="Search products..."
-                className="w-full py-2.5 pl-4 pr-10 border border-gray-200 rounded-full focus:outline-none focus:ring-1 focus:ring-black focus:border-black transition-all duration-300 bg-gray-50"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                aria-label="Search products"
-              />
-              <button 
-                type="submit" 
-                className="absolute right-3 top-2.5 text-gray-400 group-hover:text-black transition-colors duration-200"
-                aria-label="Submit search"
-              >
-                <FiSearch className="h-5 w-5" />
-              </button>
-            </form>
-          </div>
-
-          {/* Right side icons */}
-          <div className="flex items-center space-x-8">
-            {/* Search icon - mobile only */}
-            <button 
-              className="md:hidden text-gray-700 hover:text-black transition-colors duration-200"
-              onClick={() => setIsSearchOpenMobile(!isSearchOpenMobile)}
-              aria-label="Toggle search"
-              aria-expanded={isSearchOpenMobile}
-            >
-              <FiSearch className="h-5 w-5" />
-            </button>
-            
-            {/* Cart icon */}
-            <Link 
-              href="/cart" 
-              className="relative text-gray-700 hover:text-black transition-colors duration-200 group"
-              aria-label={`Shopping cart with ${cartItemCount} items`}
-            >
-              <FiShoppingCart className="h-5 w-5" />
-              {cartItemCount > 0 && (
-                <motion.span 
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  className="absolute -top-2 -right-2 bg-black group-hover:bg-gray-800 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center transition-colors duration-200"
-                  aria-hidden="true"
+          {/* Right section: Search, User, Cart */}
+          <div className="flex items-center space-x-4">
+            {/* Desktop Search */}
+            <div className="hidden md:block relative">
+              <form onSubmit={handleSearch} className="flex items-center">
+                <input
+                  type="search"
+                  placeholder="Search..."
+                  className="w-32 lg:w-48 py-1.5 pl-3 pr-10 rounded-full border border-gray-200 focus:outline-none focus:ring-1 focus:ring-black focus:border-black transition-all duration-300 bg-gray-50"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                <button 
+                  type="submit" 
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400"
                 >
-                  {cartItemCount}
-                </motion.span>
-              )}
-            </Link>
-            
-            {/* User dropdown */}
-            <div className="relative dropdown-container">
-              <button 
-                className="text-gray-700 hover:text-black transition-colors duration-200"
-                onClick={() => toggleDropdown("user")}
-                aria-label="User menu"
-                aria-expanded={openDropdown === "user"}
-                aria-haspopup="true"
-              >
-                <FiUser className="h-5 w-5" />
-              </button>
-              
-              <AnimatePresence>
-                {openDropdown === "user" && (
-                  <motion.div 
-                    variants={dropdownVariants}
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
-                    transition={{ duration: 0.2 }}
-                    className="absolute right-0 mt-3 w-72 bg-white shadow-xl rounded-lg border border-gray-100 py-2 z-50 overflow-hidden"
-                    role="menu"
-                    aria-orientation="vertical"
-                  >
-                    <div className="px-4 py-3 border-b border-gray-100 bg-gray-50">
-                      <p className="text-sm font-semibold text-gray-900">My Account</p>
-                    </div>
-                    {USER_MENU_ITEMS.map((item, index) => (
-                      <Link 
-                        key={index}
-                        href={item.href} 
-                        className="flex items-center px-4 py-3 hover:bg-gray-50 transition-colors duration-200"
-                        role="menuitem"
-                      >
-                        <div className={`${item.colorClass} mr-3`}>
-                          <span className={`flex h-9 w-9 rounded-full ${item.bgColorClass} items-center justify-center`}>
-                            <item.icon className="h-4 w-4" />
-                          </span>
-                        </div>
-                        <div>
-                          <p className="text-sm font-medium text-gray-900">{item.title}</p>
-                          <p className="text-xs text-gray-500">{item.desc}</p>
-                        </div>
-                      </Link>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                  <FiSearch className="h-4 w-4" />
+                </button>
+              </form>
             </div>
             
+            {/* Mobile Search Icon */}
+            <button 
+              className="md:hidden text-gray-700"
+              onClick={() => setIsSearchOpenMobile(!isSearchOpenMobile)}
+              aria-label="Toggle search"
+            >
+              {isSearchOpenMobile ? <FiX className="h-5 w-5" /> : <FiSearch className="h-5 w-5" />}
+            </button>
+
+            {/* User Profile or Login */}
+            <div className="relative">
+              {loading ? (
+                <div className="h-8 w-8 rounded-full bg-gray-200 animate-pulse"></div>
+              ) : user ? (
+                <div className="relative inline-block">
+                  <button 
+                    onClick={() => toggleDropdown('user')}
+                    className="flex items-center focus:outline-none"
+                    aria-label="User profile"
+                  >
+                    <div className="h-8 w-8 rounded-full overflow-hidden border border-gray-200">
+                      {user.profileImage ? (
+                        <Image 
+                          src={user.profileImage} 
+                          alt={user.name} 
+                          width={32} 
+                          height={32}
+                          className="h-full w-full object-cover" 
+                        />
+                      ) : (
+                        <div className="h-full w-full bg-indigo-100 flex items-center justify-center">
+                          <span className="text-indigo-700 font-medium text-sm">
+                            {user.name.charAt(0).toUpperCase()}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </button>
+                  {openDropdown === 'user' && (
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10 border border-gray-100">
+                      <div className="px-4 py-2 border-b border-gray-100">
+                        <p className="text-sm font-medium text-gray-900">{user.name}</p>
+                        <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                      </div>
+                      <Link 
+                        href="/profile" 
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                      >
+                        Your Profile
+                      </Link>
+                      <button
+                        onClick={handleLogout}
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                      >
+                        <div className="flex items-center">
+                          <FiLogOut className="mr-2 h-4 w-4" />
+                          Sign out
+                        </div>
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="relative inline-block">
+                  <button 
+                    onClick={() => toggleDropdown('auth')}
+                    className="text-gray-700 focus:outline-none"
+                    aria-label="Account options"
+                  >
+                    <FiUser className="h-6 w-6" />
+                  </button>
+                  {openDropdown === 'auth' && (
+                    <div className="absolute right-0 mt-2 w-72 bg-white rounded-md shadow-lg py-1 z-10 border border-gray-100">
+                      {USER_MENU_ITEMS.map((item) => (
+                        <Link
+                          key={item.title}
+                          href={item.href}
+                          className="flex px-4 py-3 hover:bg-gray-50 transition-colors duration-150"
+                          onClick={() => setOpenDropdown(null)}
+                        >
+                          <div className={`${item.bgColorClass} p-2 rounded-full mr-3`}>
+                            <item.icon className={`h-5 w-5 ${item.colorClass}`} />
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium text-gray-900">{item.title}</p>
+                            <p className="text-xs text-gray-500">{item.desc}</p>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Cart */}
+            <div className="relative">
+              <Link href="/cart" className="text-gray-700 relative">
+                <FiShoppingCart className="h-6 w-6" />
+                {cartItemCount > 0 && (
+                  <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
+                    {cartItemCount}
+                  </span>
+                )}
+              </Link>
+            </div>
+
             {/* Mobile menu button */}
             <button 
-              className="md:hidden p-1 rounded-md hover:bg-gray-100 transition-colors duration-200" 
               onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="md:hidden text-gray-700"
               aria-label="Toggle mobile menu"
-              aria-expanded={isMenuOpen}
             >
-              {isMenuOpen ? (
-                <FiX className="h-6 w-6 text-gray-700" />
-              ) : (
-                <FiMenu className="h-6 w-6 text-gray-700" />
-              )}
+              {isMenuOpen ? <FiX className="h-6 w-6" /> : <FiMenu className="h-6 w-6" />}
             </button>
           </div>
         </div>
       </div>
-      
-      {/* Mobile search bar */}
+
+      {/* Mobile search input */}
       <AnimatePresence>
         {isSearchOpenMobile && (
           <motion.div
