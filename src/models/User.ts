@@ -6,14 +6,36 @@ export interface IUser extends Document {
   email: string;
   password: string;
   profileImage?: string;
+  address?: {
+    addressLine1: string;
+    addressLine2: string;
+    landmark: string;
+    city: string;
+    state: string;
+    pinCode: string;
+    country: string;
+    phone: string;
+  };
   comparePassword(candidatePassword: string): Promise<boolean>;
 }
+
+const AddressSchema = new Schema({
+  addressLine1: { type: String, required: true },
+  addressLine2: { type: String, required: true },
+  landmark: { type: String },
+  city: { type: String, required: true },
+  state: { type: String, required: true },
+  pinCode: { type: String, required: true },
+  country: { type: String, required: true, default: 'India' },
+  phone: { type: String, required: true }
+});
 
 const UserSchema = new Schema<IUser>({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   profileImage: { type: String },
+  address: { type: AddressSchema }
 }, { timestamps: true });
 
 // Hash password before saving

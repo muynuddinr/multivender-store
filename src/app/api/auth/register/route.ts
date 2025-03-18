@@ -6,7 +6,7 @@ export async function POST(req: NextRequest) {
   try {
     await dbConnect();
     
-    const { name, email, password, profileImage } = await req.json();
+    const { name, email, password, profileImage, address } = await req.json();
     
     // Validate input
     if (!name || !email || !password) {
@@ -26,12 +26,20 @@ export async function POST(req: NextRequest) {
       );
     }
     
-    // Create new user
+    // Create new user with address
     const user = new User({
       name,
       email,
       password,
-      profileImage
+      profileImage,
+      address: address ? {
+        street: address.addressLine1,
+        zipCode: address.pinCode,
+        city: address.city,
+        state: address.state,
+        country: address.country || 'India',
+        phone: address.phone
+      } : undefined
     });
     
     await user.save();
@@ -49,7 +57,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error('Registration error:', error);
     return NextResponse.json(
-      { message: 'Something went wrong with registration' },
+      { message: 'Registration failed: ' + (error instanceof Error ? error.message : 'Unknown error') },
       { status: 500 }
     );
   }

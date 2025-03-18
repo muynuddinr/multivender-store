@@ -1,349 +1,402 @@
 'use client';
 
-import { useEffect, useState, FormEvent, ChangeEvent, useRef } from 'react';
-import { useAuth } from '@/context/AuthContext';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext';
+import { FiUser, FiShoppingBag, FiHeart, FiClock, FiMapPin, FiSettings, FiLogOut } from 'react-icons/fi';
+import { MdOutlineLocalShipping, MdOutlineRateReview } from 'react-icons/md';
+import { BiSupport } from 'react-icons/bi';
 
 export default function ProfileContent() {
-  const { user, loading, login } = useAuth();
+  const { user, loading, logout } = useAuth();
   const router = useRouter();
-  const [isEditing, setIsEditing] = useState(false);
-  const [profileData, setProfileData] = useState({
-    name: '',
-    email: '',
-    currentPassword: '',
-    newPassword: '',
-    confirmPassword: '',
-  });
-  const [profileImage, setProfileImage] = useState<string | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [isSaving, setIsSaving] = useState(false);
+  const [activeTab, setActiveTab] = useState('profile');
+  const [userDetails, setUserDetails] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
 
-  // Redirect if not logged in
   useEffect(() => {
     if (!loading && !user) {
       router.push('/customer-login');
+      return;
     }
-  }, [loading, user, router]);
 
-  // Initialize form data when user data is loaded
-  useEffect(() => {
     if (user) {
-      setProfileData({
-        name: user.name,
-        email: user.email,
-        currentPassword: '',
-        newPassword: '',
-        confirmPassword: '',
-      });
-      setProfileImage(user.profileImage || null);
+      fetchUserDetails();
     }
-  }, [user]);
+  }, [user, loading, router]);
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setProfileData({
-      ...profileData,
-      [name]: value,
-    });
-  };
-
-  const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfileImage(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    setError('');
-    setSuccess('');
-    setIsSaving(true);
-
-    // Validate passwords if attempting to change them
-    if (profileData.newPassword) {
-      if (profileData.newPassword !== profileData.confirmPassword) {
-        setError("New passwords don't match");
-        setIsSaving(false);
-        return;
-      }
-
-      if (!profileData.currentPassword) {
-        setError("Please enter your current password");
-        setIsSaving(false);
-        return;
-      }
-    }
-
+  const fetchUserDetails = async () => {
     try {
-      const updateData: any = {
-        name: profileData.name,
-        profileImage: profileImage
-      };
-
-      // Only include password fields if attempting to change password
-      if (profileData.newPassword) {
-        updateData.currentPassword = profileData.currentPassword;
-        updateData.newPassword = profileData.newPassword;
-      }
-
-      const response = await fetch('/api/user/update-profile', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updateData),
-      });
-
-      const data = await response.json();
-
+      setIsLoading(true);
+      const response = await fetch('/api/user/profile');
+      
       if (!response.ok) {
-        throw new Error(data.message || 'Failed to update profile');
+        throw new Error('Failed to fetch user details');
       }
-
-      // Update user in auth context with the new data
-      login({
-        ...user!,
-        name: profileData.name,
-        profileImage: profileImage || undefined
-      });
-
-      setSuccess('Profile updated successfully');
-      setIsEditing(false);
       
-      // Clear password fields
-      setProfileData({
-        ...profileData,
-        currentPassword: '',
-        newPassword: '',
-        confirmPassword: '',
-      });
-      
+      const data = await response.json();
+      setUserDetails(data.user);
     } catch (err: any) {
       setError(err.message);
     } finally {
-      setIsSaving(false);
+      setIsLoading(false);
     }
   };
 
-  if (loading) {
+  const handleLogout = async () => {
+    await logout();
+    router.push('/');
+  };
+
+  if (loading || isLoading) {
     return (
-      <div className="min-h-screen pt-20 px-4 flex items-center justify-center">
-        <div className="animate-spin h-8 w-8 border-4 border-indigo-500 rounded-full border-t-transparent"></div>
+      <div className="min-h-screen bg-gray-50 flex justify-center items-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
       </div>
     );
   }
 
-  if (!user) {
-    return null; // Will redirect via useEffect
-  }
-
   return (
-    <div className="min-h-screen pt-20 px-4 bg-gray-50">
-      <div className="max-w-3xl mx-auto bg-white rounded-lg shadow overflow-hidden mt-8">
-        <div className="md:flex">
-          <div className="md:w-1/3 bg-indigo-50 p-6 flex flex-col items-center">
-            <div className="h-32 w-32 sm:h-40 sm:w-40 rounded-full overflow-hidden bg-gray-100 border-4 border-white shadow-lg mb-4">
-              {profileImage ? (
-                <img 
-                  src={profileImage} 
-                  alt={user.name} 
-                  className="h-full w-full object-cover" 
-                />
-              ) : (
-                <div className="h-full w-full bg-indigo-100 flex items-center justify-center">
-                  <span className="text-indigo-700 font-bold text-4xl">
-                    {user.name.charAt(0).toUpperCase()}
-                  </span>
+    <div className="min-h-screen bg-gray-50 pt-16 pb-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-white shadow overflow-hidden sm:rounded-lg">
+          {/* Header with user basic info */}
+          <div className="bg-gradient-to-r from-indigo-600 to-indigo-700 px-4 py-5 sm:px-6 text-white">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <div className="h-16 w-16 rounded-full bg-white flex items-center justify-center overflow-hidden border-2 border-white">
+                  {userDetails?.profileImage ? (
+                    <img src={userDetails.profileImage} alt="Profile" className="h-full w-full object-cover" />
+                  ) : (
+                    <FiUser className="h-8 w-8 text-indigo-500" />
+                  )}
                 </div>
-              )}
+              </div>
+              <div className="ml-4">
+                <h3 className="text-lg font-medium leading-6">{userDetails?.name || 'User'}</h3>
+                <p className="text-sm opacity-80">{userDetails?.email || ''}</p>
+                <p className="text-sm opacity-80 mt-1">Customer since {new Date(userDetails?.createdAt || Date.now()).toLocaleDateString('en-IN')}</p>
+              </div>
             </div>
-            
-            {isEditing && (
-              <button
-                type="button"
-                onClick={() => fileInputRef.current?.click()}
-                className="mt-2 bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
-                Change Photo
-              </button>
-            )}
-            
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleImageUpload}
-              className="hidden"
-              accept="image/*"
-            />
-            
-            <h2 className="mt-4 text-xl font-semibold text-gray-900">{user.name}</h2>
-            <p className="text-gray-600 text-sm">{user.email}</p>
           </div>
-          
-          <div className="md:w-2/3 p-6">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-lg font-medium text-gray-900">Account Information</h3>
-              
-              {!isEditing ? (
+
+          <div className="flex flex-col md:flex-row">
+            {/* Sidebar navigation */}
+            <div className="w-full md:w-64 bg-gray-50 border-r border-gray-200">
+              <nav className="space-y-1 p-4">
                 <button
-                  type="button"
-                  onClick={() => setIsEditing(true)}
-                  className="bg-indigo-600 text-white py-1.5 px-4 rounded-md text-sm font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  onClick={() => setActiveTab('profile')}
+                  className={`w-full flex items-center px-3 py-3 text-sm rounded-md ${
+                    activeTab === 'profile' ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700 hover:bg-gray-100'
+                  }`}
                 >
-                  Edit Profile
+                  <FiUser className="mr-3 flex-shrink-0 h-5 w-5" />
+                  <span>My Profile</span>
                 </button>
-              ) : (
+                
                 <button
-                  type="button"
-                  onClick={() => {
-                    setIsEditing(false);
-                    // Reset form data to current user data
-                    if (user) {
-                      setProfileData({
-                        name: user.name,
-                        email: user.email,
-                        currentPassword: '',
-                        newPassword: '',
-                        confirmPassword: '',
-                      });
-                      setProfileImage(user.profileImage || null);
-                    }
-                    setError('');
-                    setSuccess('');
-                  }}
-                  className="text-gray-600 py-1.5 px-4 rounded-md text-sm font-medium hover:text-gray-900 focus:outline-none"
+                  onClick={() => setActiveTab('orders')}
+                  className={`w-full flex items-center px-3 py-3 text-sm rounded-md ${
+                    activeTab === 'orders' ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700 hover:bg-gray-100'
+                  }`}
                 >
-                  Cancel
+                  <FiShoppingBag className="mr-3 flex-shrink-0 h-5 w-5" />
+                  <span>My Orders</span>
                 </button>
-              )}
+                
+                <button
+                  onClick={() => setActiveTab('wishlist')}
+                  className={`w-full flex items-center px-3 py-3 text-sm rounded-md ${
+                    activeTab === 'wishlist' ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  <FiHeart className="mr-3 flex-shrink-0 h-5 w-5" />
+                  <span>Wishlist</span>
+                </button>
+                
+                <button
+                  onClick={() => setActiveTab('history')}
+                  className={`w-full flex items-center px-3 py-3 text-sm rounded-md ${
+                    activeTab === 'history' ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  <FiClock className="mr-3 flex-shrink-0 h-5 w-5" />
+                  <span>Browsing History</span>
+                </button>
+                
+                <button
+                  onClick={() => setActiveTab('address')}
+                  className={`w-full flex items-center px-3 py-3 text-sm rounded-md ${
+                    activeTab === 'address' ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  <FiMapPin className="mr-3 flex-shrink-0 h-5 w-5" />
+                  <span>My Addresses</span>
+                </button>
+                
+                <button
+                  onClick={() => setActiveTab('returns')}
+                  className={`w-full flex items-center px-3 py-3 text-sm rounded-md ${
+                    activeTab === 'returns' ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  <MdOutlineLocalShipping className="mr-3 flex-shrink-0 h-5 w-5" />
+                  <span>Returns & Refunds</span>
+                </button>
+                
+                <button
+                  onClick={() => setActiveTab('reviews')}
+                  className={`w-full flex items-center px-3 py-3 text-sm rounded-md ${
+                    activeTab === 'reviews' ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  <MdOutlineRateReview className="mr-3 flex-shrink-0 h-5 w-5" />
+                  <span>My Reviews</span>
+                </button>
+                
+                <button
+                  onClick={() => setActiveTab('settings')}
+                  className={`w-full flex items-center px-3 py-3 text-sm rounded-md ${
+                    activeTab === 'settings' ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  <FiSettings className="mr-3 flex-shrink-0 h-5 w-5" />
+                  <span>Account Settings</span>
+                </button>
+                
+                <button
+                  onClick={() => setActiveTab('support')}
+                  className={`w-full flex items-center px-3 py-3 text-sm rounded-md ${
+                    activeTab === 'support' ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  <BiSupport className="mr-3 flex-shrink-0 h-5 w-5" />
+                  <span>Help & Support</span>
+                </button>
+                
+                <button
+                  onClick={handleLogout}
+                  className="w-full flex items-center px-3 py-3 text-sm rounded-md text-red-600 hover:bg-red-50"
+                >
+                  <FiLogOut className="mr-3 flex-shrink-0 h-5 w-5" />
+                  <span>Logout</span>
+                </button>
+              </nav>
             </div>
-            
-            {error && (
-              <div className="mb-4 p-3 bg-red-50 text-red-700 text-sm rounded-md border border-red-200">
-                {error}
-              </div>
-            )}
-            
-            {success && (
-              <div className="mb-4 p-3 bg-green-50 text-green-700 text-sm rounded-md border border-green-200">
-                {success}
-              </div>
-            )}
-            
-            <form onSubmit={handleSubmit}>
-              <div className="space-y-4">
+
+            {/* Main content area */}
+            <div className="flex-1 p-6">
+              {activeTab === 'profile' && (
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                    Full Name
-                  </label>
-                  <input
-                    id="name"
-                    name="name"
-                    type="text"
-                    value={profileData.name}
-                    onChange={handleInputChange}
-                    disabled={!isEditing}
-                    className={`mt-1 block w-full px-3 py-2 border ${isEditing ? 'border-gray-300' : 'border-gray-200 bg-gray-50'} rounded-md shadow-sm text-gray-900 sm:text-sm focus:outline-none ${isEditing ? 'focus:ring-indigo-500 focus:border-indigo-500' : ''}`}
-                  />
+                  <h2 className="text-lg font-medium text-gray-900 mb-4">My Profile Information</h2>
+                  
+                  {error && (
+                    <div className="mb-4 p-3 bg-red-50 text-red-700 text-sm rounded-md border border-red-200">
+                      {error}
+                    </div>
+                  )}
+                  
+                  <div className="bg-white shadow overflow-hidden sm:rounded-lg">
+                    <div className="px-4 py-5 sm:px-6 bg-gray-50">
+                      <h3 className="text-md font-medium leading-6 text-gray-900">Personal Information</h3>
+                    </div>
+                    <div className="border-t border-gray-200 px-4 py-5 sm:p-6">
+                      <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
+                        <div>
+                          <dt className="text-sm font-medium text-gray-500">Full name</dt>
+                          <dd className="mt-1 text-sm text-gray-900">{userDetails?.name || 'Not provided'}</dd>
+                        </div>
+                        <div>
+                          <dt className="text-sm font-medium text-gray-500">Email address</dt>
+                          <dd className="mt-1 text-sm text-gray-900">{userDetails?.email || 'Not provided'}</dd>
+                        </div>
+                        <div>
+                          <dt className="text-sm font-medium text-gray-500">Phone number</dt>
+                          <dd className="mt-1 text-sm text-gray-900">{userDetails?.address?.phone || 'Not provided'}</dd>
+                        </div>
+                      </dl>
+                    </div>
+                  </div>
+
+                  <div className="mt-6 bg-white shadow overflow-hidden sm:rounded-lg">
+                    <div className="px-4 py-5 sm:px-6 bg-gray-50">
+                      <h3 className="text-md font-medium leading-6 text-gray-900">Address Information</h3>
+                    </div>
+                    <div className="border-t border-gray-200 px-4 py-5 sm:p-6">
+                      {userDetails?.address ? (
+                        <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
+                          <div className="sm:col-span-2">
+                            <dt className="text-sm font-medium text-gray-500">Street address</dt>
+                            <dd className="mt-1 text-sm text-gray-900">
+                              {userDetails.address.addressLine1}<br />
+                              {userDetails.address.addressLine2}
+                              {userDetails.address.landmark && <><br />{userDetails.address.landmark}</>}
+                            </dd>
+                          </div>
+                          <div>
+                            <dt className="text-sm font-medium text-gray-500">City</dt>
+                            <dd className="mt-1 text-sm text-gray-900">{userDetails.address.city}</dd>
+                          </div>
+                          <div>
+                            <dt className="text-sm font-medium text-gray-500">State</dt>
+                            <dd className="mt-1 text-sm text-gray-900">{userDetails.address.state}</dd>
+                          </div>
+                          <div>
+                            <dt className="text-sm font-medium text-gray-500">PIN Code</dt>
+                            <dd className="mt-1 text-sm text-gray-900">{userDetails.address.pinCode}</dd>
+                          </div>
+                          <div>
+                            <dt className="text-sm font-medium text-gray-500">Country</dt>
+                            <dd className="mt-1 text-sm text-gray-900">{userDetails.address.country}</dd>
+                          </div>
+                        </dl>
+                      ) : (
+                        <p className="text-sm text-gray-500">No address information provided.</p>
+                      )}
+                    </div>
+                  </div>
                 </div>
-                
+              )}
+
+              {activeTab === 'orders' && (
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                    Email Address
-                  </label>
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    value={profileData.email}
-                    disabled={true} // Email can't be changed
-                    className="mt-1 block w-full px-3 py-2 border border-gray-200 rounded-md shadow-sm text-gray-900 sm:text-sm bg-gray-50"
-                  />
+                  <h2 className="text-lg font-medium text-gray-900 mb-4">My Orders</h2>
+                  <div className="bg-white shadow overflow-hidden sm:rounded-lg p-6">
+                    <div className="text-center py-12">
+                      <FiShoppingBag className="mx-auto h-12 w-12 text-gray-300" />
+                      <h3 className="mt-2 text-sm font-medium text-gray-900">No orders yet</h3>
+                      <p className="mt-1 text-sm text-gray-500">Your order history will appear here</p>
+                      <div className="mt-6">
+                        <button
+                          onClick={() => router.push('/')}
+                          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        >
+                          Start Shopping
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                
-                {isEditing && (
-                  <>
-                    <div className="pt-4 border-t border-gray-200">
-                      <h4 className="text-sm font-medium text-gray-900 mb-3">Change Password (Optional)</h4>
-                      
-                      <div className="space-y-4">
-                        <div>
-                          <label htmlFor="currentPassword" className="block text-sm font-medium text-gray-700">
-                            Current Password
-                          </label>
-                          <input
-                            id="currentPassword"
-                            name="currentPassword"
-                            type="password"
-                            value={profileData.currentPassword}
-                            onChange={handleInputChange}
-                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 sm:text-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                          />
+              )}
+              
+              {activeTab === 'wishlist' && (
+                <div>
+                  <h2 className="text-lg font-medium text-gray-900 mb-4">My Wishlist</h2>
+                  <div className="bg-white shadow overflow-hidden sm:rounded-lg p-6">
+                    <div className="text-center py-12">
+                      <FiHeart className="mx-auto h-12 w-12 text-gray-300" />
+                      <h3 className="mt-2 text-sm font-medium text-gray-900">Your wishlist is empty</h3>
+                      <p className="mt-1 text-sm text-gray-500">Save items you like to your wishlist</p>
+                      <div className="mt-6">
+                        <button
+                          onClick={() => router.push('/')}
+                          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        >
+                          Explore Products
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              {activeTab === 'history' && (
+                <div>
+                  <h2 className="text-lg font-medium text-gray-900 mb-4">Browsing History</h2>
+                  <div className="bg-white shadow overflow-hidden sm:rounded-lg p-6">
+                    <div className="text-center py-12">
+                      <FiClock className="mx-auto h-12 w-12 text-gray-300" />
+                      <h3 className="mt-2 text-sm font-medium text-gray-900">No browsing history</h3>
+                      <p className="mt-1 text-sm text-gray-500">Products you view will appear here</p>
+                      <div className="mt-6">
+                        <button
+                          onClick={() => router.push('/')}
+                          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        >
+                          Browse Products
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              {activeTab === 'address' && (
+                <div>
+                  <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-lg font-medium text-gray-900">My Addresses</h2>
+                    <button className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                      + Add New Address
+                    </button>
+                  </div>
+                  
+                  {userDetails?.address ? (
+                    <div className="bg-white shadow overflow-hidden sm:rounded-lg p-4 border border-gray-200">
+                      <div className="flex justify-between">
+                        <div className="flex items-start">
+                          <div className="mt-1">
+                            <h3 className="text-sm font-medium text-gray-900">Default Address</h3>
+                            <p className="text-sm text-gray-500 mt-2">
+                              {userDetails.address.addressLine1}<br />
+                              {userDetails.address.addressLine2}
+                              {userDetails.address.landmark && <><br />{userDetails.address.landmark}</>}<br />
+                              {userDetails.address.city}, {userDetails.address.state} {userDetails.address.pinCode}<br />
+                              {userDetails.address.country}<br />
+                              Phone: {userDetails.address.phone}
+                            </p>
+                          </div>
                         </div>
-                        
-                        <div>
-                          <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700">
-                            New Password
-                          </label>
-                          <input
-                            id="newPassword"
-                            name="newPassword"
-                            type="password"
-                            value={profileData.newPassword}
-                            onChange={handleInputChange}
-                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 sm:text-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                          />
-                        </div>
-                        
-                        <div>
-                          <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                            Confirm New Password
-                          </label>
-                          <input
-                            id="confirmPassword"
-                            name="confirmPassword"
-                            type="password"
-                            value={profileData.confirmPassword}
-                            onChange={handleInputChange}
-                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 sm:text-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                          />
+                        <div className="flex space-x-2">
+                          <button className="inline-flex items-center px-2 py-1 text-xs font-medium text-indigo-700 hover:text-indigo-900">
+                            Edit
+                          </button>
+                          <button className="inline-flex items-center px-2 py-1 text-xs font-medium text-red-600 hover:text-red-800">
+                            Delete
+                          </button>
                         </div>
                       </div>
                     </div>
-                  </>
-                )}
-              </div>
-              
-              {isEditing && (
-                <div className="mt-6">
-                  <button
-                    type="submit"
-                    disabled={isSaving}
-                    className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-70 disabled:cursor-not-allowed"
-                  >
-                    {isSaving ? (
-                      <span className="flex items-center">
-                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        Saving...
-                      </span>
-                    ) : (
-                      'Save Changes'
-                    )}
-                  </button>
+                  ) : (
+                    <div className="bg-white shadow overflow-hidden sm:rounded-lg p-6">
+                      <div className="text-center py-12">
+                        <FiMapPin className="mx-auto h-12 w-12 text-gray-300" />
+                        <h3 className="mt-2 text-sm font-medium text-gray-900">No addresses saved</h3>
+                        <p className="mt-1 text-sm text-gray-500">Add a new shipping address</p>
+                        <div className="mt-6">
+                          <button className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Add New Address
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
-            </form>
+              
+              {/* Other tabs would be implemented similarly */}
+              {(activeTab === 'returns' || activeTab === 'reviews' || activeTab === 'settings' || activeTab === 'support') && (
+                <div>
+                  <h2 className="text-lg font-medium text-gray-900 mb-4">
+                    {activeTab === 'returns' && 'Returns & Refunds'}
+                    {activeTab === 'reviews' && 'My Reviews'}
+                    {activeTab === 'settings' && 'Account Settings'}
+                    {activeTab === 'support' && 'Help & Support'}
+                  </h2>
+                  <div className="bg-white shadow overflow-hidden sm:rounded-lg p-6">
+                    <div className="text-center py-12">
+                      {activeTab === 'returns' && <MdOutlineLocalShipping className="mx-auto h-12 w-12 text-gray-300" />}
+                      {activeTab === 'reviews' && <MdOutlineRateReview className="mx-auto h-12 w-12 text-gray-300" />}
+                      {activeTab === 'settings' && <FiSettings className="mx-auto h-12 w-12 text-gray-300" />}
+                      {activeTab === 'support' && <BiSupport className="mx-auto h-12 w-12 text-gray-300" />}
+                      
+                      <h3 className="mt-2 text-sm font-medium text-gray-900">Coming Soon</h3>
+                      <p className="mt-1 text-sm text-gray-500">This feature is currently under development</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

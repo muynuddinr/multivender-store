@@ -12,17 +12,13 @@ if (!MONGODB_URI) {
  * during API Route usage.
  */
 declare global {
-  var mongoose: {
+  let mongoose: {
     conn: mongoose.Connection | null;
     promise: Promise<mongoose.Connection> | null;
-  };
+  } | undefined;
 }
 
-let cached = global.mongoose;
-
-if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null };
-}
+const cached = (global as any).mongoose || ((global as any).mongoose = { conn: null, promise: null });
 
 async function dbConnect() {
   if (cached.conn) {
@@ -42,4 +38,4 @@ async function dbConnect() {
   return cached.conn;
 }
 
-export default dbConnect; 
+export default dbConnect;
