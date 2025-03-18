@@ -21,7 +21,7 @@ export interface IUser extends Document {
 
 const AddressSchema = new Schema({
   addressLine1: { type: String, required: true },
-  addressLine2: { type: String, required: true },
+  addressLine2: { type: String, required: false },
   landmark: { type: String },
   city: { type: String, required: true },
   state: { type: String, required: true },

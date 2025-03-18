@@ -33,10 +33,11 @@ export async function POST(req: NextRequest) {
       password,
       profileImage,
       address: address ? {
-        street: address.addressLine1,
-        zipCode: address.pinCode,
+        addressLine1: address.addressLine1,
+        addressLine2: address.addressLine2 || '',
         city: address.city,
         state: address.state,
+        pinCode: address.pinCode,
         country: address.country || 'India',
         phone: address.phone
       } : undefined
