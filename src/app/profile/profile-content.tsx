@@ -277,24 +277,26 @@ export default function ProfileContent() {
     <div className="flex flex-col min-h-screen">
       <div className="flex-grow bg-gray-50 pt-28 pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white shadow-lg rounded-xl overflow-hidden mb-12 border border-gray-100">
-            <div className="bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 px-6 py-8 sm:px-8 text-white relative overflow-hidden">
+          <div className="bg-white shadow-xl rounded-xl overflow-hidden mb-12 border border-gray-100 transition-all duration-300 hover:shadow-2xl">
+            <div className="bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 px-6 py-10 sm:px-8 text-white relative overflow-hidden">
               <div className="absolute inset-0 bg-pattern opacity-10" style={{backgroundImage: "url('/pattern.svg')"}}></div>
-              <div className="relative z-10 flex items-center">
+              <div className="absolute bottom-0 right-0 -mb-8 -mr-8 w-64 h-64 rounded-full bg-blue-500 opacity-20 blur-3xl"></div>
+              <div className="absolute top-0 left-0 -mt-16 -ml-16 w-72 h-72 rounded-full bg-purple-500 opacity-10 blur-3xl"></div>
+              <div className="relative z-10 flex flex-col sm:flex-row sm:items-center">
                 <div className="flex-shrink-0">
-                  <div className="h-24 w-24 rounded-full bg-white flex items-center justify-center overflow-hidden border-4 border-white shadow-md">
+                  <div className="h-28 w-28 rounded-full bg-white flex items-center justify-center overflow-hidden border-4 border-white shadow-lg transform transition-all duration-200 hover:scale-105">
                     {userDetails?.profileImage ? (
                       <img src={userDetails.profileImage} alt="Profile" className="h-full w-full object-cover" />
                     ) : (
-                      <FiUser className="h-12 w-12 text-indigo-500"/>
+                      <FiUser className="h-14 w-14 text-indigo-500"/>
                     )}
                   </div>
                 </div>
-                <div className="ml-6">
-                  <h3 className="text-2xl font-bold leading-tight">{userDetails?.name || 'User'}</h3>
+                <div className="mt-4 sm:mt-0 sm:ml-8">
+                  <h3 className="text-3xl font-bold leading-tight">{userDetails?.name || 'User'}</h3>
                   <p className="text-md opacity-90 mt-1">{userDetails?.email || ''}</p>
                   <p className="text-sm opacity-80 mt-2 flex items-center">
-                    <span className="inline-block h-2 w-2 rounded-full bg-green-400 mr-2"></span>
+                    <span className="inline-block h-2 w-2 rounded-full bg-green-400 mr-2 animate-pulse"></span>
                     Customer since {new Date(userDetails?.createdAt || Date.now()).toLocaleDateString('en-IN')}
                   </p>
                 </div>
@@ -306,117 +308,117 @@ export default function ProfileContent() {
                 <nav className="p-4 space-y-1.5">
                   <button
                     onClick={() => setActiveTab('profile')}
-                    className={`w-full flex items-center px-4 py-3.5 text-sm rounded-lg transition-all duration-200 ${
+                    className={`w-full flex items-center px-4 py-3.5 text-sm rounded-lg transition-all duration-300 ${
                       activeTab === 'profile' 
-                        ? 'bg-indigo-50 text-indigo-700 font-medium shadow-sm' 
-                        : 'text-gray-700 hover:bg-gray-100'
+                        ? 'bg-indigo-50 text-indigo-700 font-medium shadow-sm transform translate-x-1' 
+                        : 'text-gray-700 hover:bg-gray-100 hover:translate-x-1'
                     }`}
                   >
-                    <FiUser className={`mr-3 flex-shrink-0 h-5 w-5 ${activeTab === 'profile' ? 'text-indigo-500' : ''}`} />
+                    <FiUser className={`mr-3 flex-shrink-0 h-5 w-5 ${activeTab === 'profile' ? 'text-indigo-500' : ''} transform transition-all duration-200 ${activeTab === 'profile' ? 'scale-110' : ''}`} />
                     <span>My Profile</span>
                   </button>
                   
                   <button
                     onClick={() => setActiveTab('orders')}
-                    className={`w-full flex items-center px-4 py-3.5 text-sm rounded-lg transition-all duration-200 ${
+                    className={`w-full flex items-center px-4 py-3.5 text-sm rounded-lg transition-all duration-300 ${
                       activeTab === 'orders' 
-                        ? 'bg-indigo-50 text-indigo-700 font-medium shadow-sm' 
-                        : 'text-gray-700 hover:bg-gray-100'
+                        ? 'bg-indigo-50 text-indigo-700 font-medium shadow-sm transform translate-x-1' 
+                        : 'text-gray-700 hover:bg-gray-100 hover:translate-x-1'
                     }`}
                   >
-                    <FiShoppingBag className={`mr-3 flex-shrink-0 h-5 w-5 ${activeTab === 'orders' ? 'text-indigo-500' : ''}`} />
+                    <FiShoppingBag className={`mr-3 flex-shrink-0 h-5 w-5 ${activeTab === 'orders' ? 'text-indigo-500' : ''} transform transition-all duration-200 ${activeTab === 'orders' ? 'scale-110' : ''}`} />
                     <span>My Orders</span>
                   </button>
                   
                   <button
                     onClick={() => setActiveTab('wishlist')}
-                    className={`w-full flex items-center px-4 py-3.5 text-sm rounded-lg transition-all duration-200 ${
+                    className={`w-full flex items-center px-4 py-3.5 text-sm rounded-lg transition-all duration-300 ${
                       activeTab === 'wishlist' 
-                        ? 'bg-indigo-50 text-indigo-700 font-medium shadow-sm' 
-                        : 'text-gray-700 hover:bg-gray-100'
+                        ? 'bg-indigo-50 text-indigo-700 font-medium shadow-sm transform translate-x-1' 
+                        : 'text-gray-700 hover:bg-gray-100 hover:translate-x-1'
                     }`}
                   >
-                    <FiHeart className={`mr-3 flex-shrink-0 h-5 w-5 ${activeTab === 'wishlist' ? 'text-indigo-500' : ''}`} />
+                    <FiHeart className={`mr-3 flex-shrink-0 h-5 w-5 ${activeTab === 'wishlist' ? 'text-indigo-500' : ''} transform transition-all duration-200 ${activeTab === 'wishlist' ? 'scale-110' : ''}`} />
                     <span>Wishlist</span>
                   </button>
                   
                   <button
                     onClick={() => setActiveTab('history')}
-                    className={`w-full flex items-center px-4 py-3.5 text-sm rounded-lg transition-all duration-200 ${
+                    className={`w-full flex items-center px-4 py-3.5 text-sm rounded-lg transition-all duration-300 ${
                       activeTab === 'history' 
-                        ? 'bg-indigo-50 text-indigo-700 font-medium shadow-sm' 
-                        : 'text-gray-700 hover:bg-gray-100'
+                        ? 'bg-indigo-50 text-indigo-700 font-medium shadow-sm transform translate-x-1' 
+                        : 'text-gray-700 hover:bg-gray-100 hover:translate-x-1'
                     }`}
                   >
-                    <FiClock className={`mr-3 flex-shrink-0 h-5 w-5 ${activeTab === 'history' ? 'text-indigo-500' : ''}`} />
+                    <FiClock className={`mr-3 flex-shrink-0 h-5 w-5 ${activeTab === 'history' ? 'text-indigo-500' : ''} transform transition-all duration-200 ${activeTab === 'history' ? 'scale-110' : ''}`} />
                     <span>Browsing History</span>
                   </button>
                   
                   <button
                     onClick={() => setActiveTab('address')}
-                    className={`w-full flex items-center px-4 py-3.5 text-sm rounded-lg transition-all duration-200 ${
+                    className={`w-full flex items-center px-4 py-3.5 text-sm rounded-lg transition-all duration-300 ${
                       activeTab === 'address' 
-                        ? 'bg-indigo-50 text-indigo-700 font-medium shadow-sm' 
-                        : 'text-gray-700 hover:bg-gray-100'
+                        ? 'bg-indigo-50 text-indigo-700 font-medium shadow-sm transform translate-x-1' 
+                        : 'text-gray-700 hover:bg-gray-100 hover:translate-x-1'
                     }`}
                   >
-                    <FiMapPin className={`mr-3 flex-shrink-0 h-5 w-5 ${activeTab === 'address' ? 'text-indigo-500' : ''}`} />
+                    <FiMapPin className={`mr-3 flex-shrink-0 h-5 w-5 ${activeTab === 'address' ? 'text-indigo-500' : ''} transform transition-all duration-200 ${activeTab === 'address' ? 'scale-110' : ''}`} />
                     <span>My Addresses</span>
                   </button>
                   
                   <button
                     onClick={() => setActiveTab('returns')}
-                    className={`w-full flex items-center px-4 py-3.5 text-sm rounded-lg transition-all duration-200 ${
+                    className={`w-full flex items-center px-4 py-3.5 text-sm rounded-lg transition-all duration-300 ${
                       activeTab === 'returns' 
-                        ? 'bg-indigo-50 text-indigo-700 font-medium shadow-sm' 
-                        : 'text-gray-700 hover:bg-gray-100'
+                        ? 'bg-indigo-50 text-indigo-700 font-medium shadow-sm transform translate-x-1' 
+                        : 'text-gray-700 hover:bg-gray-100 hover:translate-x-1'
                     }`}
                   >
-                    <MdOutlineLocalShipping className={`mr-3 flex-shrink-0 h-5 w-5 ${activeTab === 'returns' ? 'text-indigo-500' : ''}`} />
+                    <MdOutlineLocalShipping className={`mr-3 flex-shrink-0 h-5 w-5 ${activeTab === 'returns' ? 'text-indigo-500' : ''} transform transition-all duration-200 ${activeTab === 'returns' ? 'scale-110' : ''}`} />
                     <span>Returns & Refunds</span>
                   </button>
                   
                   <button
                     onClick={() => setActiveTab('reviews')}
-                    className={`w-full flex items-center px-4 py-3.5 text-sm rounded-lg transition-all duration-200 ${
+                    className={`w-full flex items-center px-4 py-3.5 text-sm rounded-lg transition-all duration-300 ${
                       activeTab === 'reviews' 
-                        ? 'bg-indigo-50 text-indigo-700 font-medium shadow-sm' 
-                        : 'text-gray-700 hover:bg-gray-100'
+                        ? 'bg-indigo-50 text-indigo-700 font-medium shadow-sm transform translate-x-1' 
+                        : 'text-gray-700 hover:bg-gray-100 hover:translate-x-1'
                     }`}
                   >
-                    <MdOutlineRateReview className={`mr-3 flex-shrink-0 h-5 w-5 ${activeTab === 'reviews' ? 'text-indigo-500' : ''}`} />
+                    <MdOutlineRateReview className={`mr-3 flex-shrink-0 h-5 w-5 ${activeTab === 'reviews' ? 'text-indigo-500' : ''} transform transition-all duration-200 ${activeTab === 'reviews' ? 'scale-110' : ''}`} />
                     <span>My Reviews</span>
                   </button>
                   
                   <button
                     onClick={() => setActiveTab('settings')}
-                    className={`w-full flex items-center px-4 py-3.5 text-sm rounded-lg transition-all duration-200 ${
+                    className={`w-full flex items-center px-4 py-3.5 text-sm rounded-lg transition-all duration-300 ${
                       activeTab === 'settings' 
-                        ? 'bg-indigo-50 text-indigo-700 font-medium shadow-sm' 
-                        : 'text-gray-700 hover:bg-gray-100'
+                        ? 'bg-indigo-50 text-indigo-700 font-medium shadow-sm transform translate-x-1' 
+                        : 'text-gray-700 hover:bg-gray-100 hover:translate-x-1'
                     }`}
                   >
-                    <FiSettings className={`mr-3 flex-shrink-0 h-5 w-5 ${activeTab === 'settings' ? 'text-indigo-500' : ''}`} />
+                    <FiSettings className={`mr-3 flex-shrink-0 h-5 w-5 ${activeTab === 'settings' ? 'text-indigo-500' : ''} transform transition-all duration-200 ${activeTab === 'settings' ? 'scale-110' : ''}`} />
                     <span>Account Settings</span>
                   </button>
                   
                   <button
                     onClick={() => setActiveTab('support')}
-                    className={`w-full flex items-center px-4 py-3.5 text-sm rounded-lg transition-all duration-200 ${
+                    className={`w-full flex items-center px-4 py-3.5 text-sm rounded-lg transition-all duration-300 ${
                       activeTab === 'support' 
-                        ? 'bg-indigo-50 text-indigo-700 font-medium shadow-sm' 
-                        : 'text-gray-700 hover:bg-gray-100'
+                        ? 'bg-indigo-50 text-indigo-700 font-medium shadow-sm transform translate-x-1' 
+                        : 'text-gray-700 hover:bg-gray-100 hover:translate-x-1'
                     }`}
                   >
-                    <BiSupport className={`mr-3 flex-shrink-0 h-5 w-5 ${activeTab === 'support' ? 'text-indigo-500' : ''}`} />
+                    <BiSupport className={`mr-3 flex-shrink-0 h-5 w-5 ${activeTab === 'support' ? 'text-indigo-500' : ''} transform transition-all duration-200 ${activeTab === 'support' ? 'scale-110' : ''}`} />
                     <span>Help & Support</span>
                   </button>
                   
                   <button
                     onClick={handleLogout}
-                    className="w-full flex items-center px-4 py-3.5 text-sm rounded-lg text-red-600 hover:bg-red-50 transition-all duration-200"
+                    className="w-full flex items-center px-4 py-3.5 text-sm rounded-lg text-red-600 hover:bg-red-50 transition-all duration-300 hover:translate-x-1"
                   >
-                    <FiLogOut className="mr-3 flex-shrink-0 h-5 w-5" />
+                    <FiLogOut className="mr-3 flex-shrink-0 h-5 w-5 transform transition-transform duration-300 group-hover:rotate-90" />
                     <span>Logout</span>
                   </button>
                 </nav>
@@ -424,11 +426,11 @@ export default function ProfileContent() {
 
               <div className="flex-grow p-6">
                 {activeTab === 'profile' && (
-                  <div>
-                    <h2 className="text-xl font-bold text-gray-900 mb-6">My Profile Information</h2>
+                  <div className="animate-fadeIn">
+                    <h2 className="text-xl font-bold text-gray-900 mb-6 border-b pb-2 border-gray-200">My Profile Information</h2>
                     
                     {error && (
-                      <div className="mb-6 p-4 bg-red-50 text-red-700 text-sm rounded-lg border border-red-200 flex items-center">
+                      <div className="mb-6 p-4 bg-red-50 text-red-700 text-sm rounded-lg border border-red-200 flex items-center animate-pulse">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-red-500" viewBox="0 0 20 20" fill="currentColor">
                           <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                         </svg>
@@ -436,7 +438,7 @@ export default function ProfileContent() {
                       </div>
                     )}
                     
-                    <div className="bg-white shadow-md rounded-xl overflow-hidden border border-gray-100 transition-all duration-300 hover:shadow-lg mb-6">
+                    <div className="bg-white shadow-md rounded-xl overflow-hidden border border-gray-100 transition-all duration-300 hover:shadow-lg mb-6 transform hover:-translate-y-1">
                       <div className="px-5 py-4 sm:px-6 bg-gradient-to-r from-gray-50 to-white border-b">
                         <h3 className="text-base font-semibold leading-6 text-gray-900 flex items-center">
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-indigo-500" viewBox="0 0 20 20" fill="currentColor">
@@ -449,19 +451,19 @@ export default function ProfileContent() {
                         <dl className="grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-2">
                           <div className="relative group">
                             <dt className="text-sm font-medium text-gray-500 mb-1">Full name</dt>
-                            <dd className="text-base text-gray-900 p-2 rounded-md bg-gray-50 border border-gray-100 group-hover:border-indigo-100 group-hover:bg-indigo-50/30 transition-all">
+                            <dd className="text-base text-gray-900 p-3 rounded-md bg-gray-50 border border-gray-100 group-hover:border-indigo-200 group-hover:bg-indigo-50/30 transition-all duration-300 shadow-sm">
                               {userDetails?.name || 'Not provided'}
                             </dd>
                           </div>
                           <div className="relative group">
                             <dt className="text-sm font-medium text-gray-500 mb-1">Email address</dt>
-                            <dd className="text-base text-gray-900 p-2 rounded-md bg-gray-50 border border-gray-100 group-hover:border-indigo-100 group-hover:bg-indigo-50/30 transition-all">
+                            <dd className="text-base text-gray-900 p-3 rounded-md bg-gray-50 border border-gray-100 group-hover:border-indigo-200 group-hover:bg-indigo-50/30 transition-all duration-300 shadow-sm">
                               {userDetails?.email || 'Not provided'}
                             </dd>
                           </div>
                           <div className="relative group">
                             <dt className="text-sm font-medium text-gray-500 mb-1">Phone number</dt>
-                            <dd className="text-base text-gray-900 p-2 rounded-md bg-gray-50 border border-gray-100 group-hover:border-indigo-100 group-hover:bg-indigo-50/30 transition-all">
+                            <dd className="text-base text-gray-900 p-3 rounded-md bg-gray-50 border border-gray-100 group-hover:border-indigo-200 group-hover:bg-indigo-50/30 transition-all duration-300 shadow-sm">
                               {userDetails?.address?.phone || 'Not provided'}
                             </dd>
                           </div>
@@ -483,7 +485,7 @@ export default function ProfileContent() {
                           <dl className="grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-2">
                             <div className="sm:col-span-2 relative group">
                               <dt className="text-sm font-medium text-gray-500 mb-1">Street address</dt>
-                              <dd className="text-base text-gray-900 p-3 rounded-md bg-gray-50 border border-gray-100 group-hover:border-indigo-100 group-hover:bg-indigo-50/30 transition-all">
+                              <dd className="text-base text-gray-900 p-3 rounded-md bg-gray-50 border border-gray-100 group-hover:border-indigo-200 group-hover:bg-indigo-50/30 transition-all duration-300 shadow-sm">
                                 {userDetails.address.addressLine1}<br />
                                 {userDetails.address.addressLine2}
                                 {userDetails.address.landmark && <><br />{userDetails.address.landmark}</>}
@@ -491,25 +493,25 @@ export default function ProfileContent() {
                             </div>
                             <div>
                               <dt className="text-sm font-medium text-gray-500 mb-1">City</dt>
-                              <dd className="text-base text-gray-900 p-2 rounded-md bg-gray-50 border border-gray-100 group-hover:border-indigo-100 group-hover:bg-indigo-50/30 transition-all">
+                              <dd className="text-base text-gray-900 p-3 rounded-md bg-gray-50 border border-gray-100 group-hover:border-indigo-200 group-hover:bg-indigo-50/30 transition-all duration-300 shadow-sm">
                                 {userDetails.address.city}
                               </dd>
                             </div>
                             <div>
                               <dt className="text-sm font-medium text-gray-500 mb-1">State</dt>
-                              <dd className="text-base text-gray-900 p-2 rounded-md bg-gray-50 border border-gray-100 group-hover:border-indigo-100 group-hover:bg-indigo-50/30 transition-all">
+                              <dd className="text-base text-gray-900 p-3 rounded-md bg-gray-50 border border-gray-100 group-hover:border-indigo-200 group-hover:bg-indigo-50/30 transition-all duration-300 shadow-sm">
                                 {userDetails.address.state}
                               </dd>
                             </div>
                             <div>
                               <dt className="text-sm font-medium text-gray-500 mb-1">PIN Code</dt>
-                              <dd className="text-base text-gray-900 p-2 rounded-md bg-gray-50 border border-gray-100 group-hover:border-indigo-100 group-hover:bg-indigo-50/30 transition-all">
+                              <dd className="text-base text-gray-900 p-3 rounded-md bg-gray-50 border border-gray-100 group-hover:border-indigo-200 group-hover:bg-indigo-50/30 transition-all duration-300 shadow-sm">
                                 {userDetails.address.pinCode}
                               </dd>
                             </div>
                             <div>
                               <dt className="text-sm font-medium text-gray-500 mb-1">Country</dt>
-                              <dd className="text-base text-gray-900 p-2 rounded-md bg-gray-50 border border-gray-100 group-hover:border-indigo-100 group-hover:bg-indigo-50/30 transition-all">
+                              <dd className="text-base text-gray-900 p-3 rounded-md bg-gray-50 border border-gray-100 group-hover:border-indigo-200 group-hover:bg-indigo-50/30 transition-all duration-300 shadow-sm">
                                 {userDetails.address.country}
                               </dd>
                             </div>
@@ -534,17 +536,19 @@ export default function ProfileContent() {
                 )}
 
                 {activeTab === 'orders' && (
-                  <div>
-                    <h2 className="text-lg font-medium text-gray-900 mb-4">My Orders</h2>
-                    <div className="bg-white shadow overflow-hidden sm:rounded-lg p-6">
+                  <div className="animate-fadeIn">
+                    <h2 className="text-xl font-bold text-gray-900 mb-6 border-b pb-2 border-gray-200">My Orders</h2>
+                    <div className="bg-white shadow-lg rounded-xl overflow-hidden p-6 border border-gray-100 transition-all duration-300 hover:shadow-xl">
                       <div className="text-center py-12">
-                        <FiShoppingBag className="mx-auto h-12 w-12 text-gray-300" />
-                        <h3 className="mt-2 text-sm font-medium text-gray-900">No orders yet</h3>
+                        <div className="mx-auto h-24 w-24 bg-indigo-50 rounded-full flex items-center justify-center mb-4">
+                          <FiShoppingBag className="h-12 w-12 text-indigo-300" />
+                        </div>
+                        <h3 className="mt-2 text-lg font-medium text-gray-900">No orders yet</h3>
                         <p className="mt-1 text-sm text-gray-500">Your order history will appear here</p>
                         <div className="mt-6">
                           <button
                             onClick={() => router.push('/')}
-                            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            className="inline-flex items-center px-5 py-2.5 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300 transform hover:-translate-y-1"
                           >
                             Start Shopping
                           </button>
@@ -555,17 +559,19 @@ export default function ProfileContent() {
                 )}
                 
                 {activeTab === 'wishlist' && (
-                  <div>
-                    <h2 className="text-lg font-medium text-gray-900 mb-4">My Wishlist</h2>
-                    <div className="bg-white shadow overflow-hidden sm:rounded-lg p-6">
+                  <div className="animate-fadeIn">
+                    <h2 className="text-xl font-bold text-gray-900 mb-6 border-b pb-2 border-gray-200">My Wishlist</h2>
+                    <div className="bg-white shadow-lg rounded-xl overflow-hidden p-6 border border-gray-100 transition-all duration-300 hover:shadow-xl">
                       <div className="text-center py-12">
-                        <FiHeart className="mx-auto h-12 w-12 text-gray-300" />
-                        <h3 className="mt-2 text-sm font-medium text-gray-900">Your wishlist is empty</h3>
+                        <div className="mx-auto h-24 w-24 bg-indigo-50 rounded-full flex items-center justify-center mb-4">
+                          <FiHeart className="h-12 w-12 text-indigo-300" />
+                        </div>
+                        <h3 className="mt-2 text-lg font-medium text-gray-900">Your wishlist is empty</h3>
                         <p className="mt-1 text-sm text-gray-500">Save items you like to your wishlist</p>
                         <div className="mt-6">
                           <button
                             onClick={() => router.push('/')}
-                            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            className="inline-flex items-center px-5 py-2.5 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300 transform hover:-translate-y-1"
                           >
                             Explore Products
                           </button>
@@ -576,17 +582,19 @@ export default function ProfileContent() {
                 )}
                 
                 {activeTab === 'history' && (
-                  <div>
-                    <h2 className="text-lg font-medium text-gray-900 mb-4">Browsing History</h2>
-                    <div className="bg-white shadow overflow-hidden sm:rounded-lg p-6">
+                  <div className="animate-fadeIn">
+                    <h2 className="text-xl font-bold text-gray-900 mb-6 border-b pb-2 border-gray-200">Browsing History</h2>
+                    <div className="bg-white shadow-lg rounded-xl overflow-hidden p-6 border border-gray-100 transition-all duration-300 hover:shadow-xl">
                       <div className="text-center py-12">
-                        <FiClock className="mx-auto h-12 w-12 text-gray-300" />
-                        <h3 className="mt-2 text-sm font-medium text-gray-900">No browsing history</h3>
+                        <div className="mx-auto h-24 w-24 bg-indigo-50 rounded-full flex items-center justify-center mb-4">
+                          <FiClock className="h-12 w-12 text-indigo-300" />
+                        </div>
+                        <h3 className="mt-2 text-lg font-medium text-gray-900">No browsing history</h3>
                         <p className="mt-1 text-sm text-gray-500">Products you view will appear here</p>
                         <div className="mt-6">
                           <button
                             onClick={() => router.push('/')}
-                            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            className="inline-flex items-center px-5 py-2.5 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300 transform hover:-translate-y-1"
                           >
                             Browse Products
                           </button>
@@ -597,7 +605,7 @@ export default function ProfileContent() {
                 )}
                 
                 {activeTab === 'address' && (
-                  <div>
+                  <div className="animate-fadeIn">
                     <div className="flex justify-between items-center mb-4">
                       <h2 className="text-lg font-medium text-gray-900">My Addresses</h2>
                       {!showAddressForm && (
@@ -676,8 +684,8 @@ export default function ProfileContent() {
                 )}
                 
                 {activeTab === 'settings' && (
-                  <div>
-                    <h2 className="text-lg font-medium text-gray-900 mb-4">Account Settings</h2>
+                  <div className="animate-fadeIn">
+                    <h2 className="text-xl font-bold text-gray-900 mb-6 border-b pb-2 border-gray-200">Account Settings</h2>
                     
                     {settingsError && (
                       <div className="mb-4 p-3 bg-red-50 text-red-700 text-sm rounded-md border border-red-200">
@@ -691,13 +699,16 @@ export default function ProfileContent() {
                       </div>
                     )}
                     
-                    <div className="bg-white shadow overflow-hidden sm:rounded-lg mb-6">
-                      <div className="px-4 py-5 sm:px-6 bg-gray-50">
-                        <h3 className="text-md font-medium leading-6 text-gray-900">Profile Picture</h3>
+                    <div className="bg-white shadow-lg rounded-xl overflow-hidden mb-6 border border-gray-100 transition-all duration-300 hover:shadow-xl">
+                      <div className="px-4 py-5 sm:px-6 bg-gradient-to-r from-indigo-50 to-white">
+                        <h3 className="text-md font-medium leading-6 text-gray-900 flex items-center">
+                          <FiUser className="mr-2 h-5 w-5 text-indigo-500" />
+                          Profile Picture
+                        </h3>
                       </div>
                       <div className="border-t border-gray-200 px-4 py-5 sm:p-6">
                         <div className="flex items-center">
-                          <div className="h-20 w-20 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center border border-gray-200">
+                          <div className="h-24 w-24 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center border-2 border-gray-200 shadow-lg transform transition-all duration-300 hover:scale-105">
                             {newProfileImage ? (
                               <img src={newProfileImage} alt="New profile" className="h-full w-full object-cover" />
                             ) : userDetails?.profileImage ? (
@@ -707,7 +718,7 @@ export default function ProfileContent() {
                             )}
                           </div>
                           
-                          <div className="ml-5">
+                          <div className="ml-6">
                             <input
                               type="file"
                               accept="image/*"
@@ -719,7 +730,7 @@ export default function ProfileContent() {
                             <button
                               type="button"
                               onClick={() => fileInputRef.current?.click()}
-                              className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                              className="inline-flex items-center px-4 py-2.5 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300"
                             >
                               Change Picture
                             </button>
@@ -814,13 +825,14 @@ export default function ProfileContent() {
                 )}
 
                 {activeTab === 'returns' && (
-                  <div>
-                    <h2 className="text-lg font-medium text-gray-900 mb-4">Returns & Refunds</h2>
-                    <div className="bg-white shadow overflow-hidden sm:rounded-lg p-6">
+                  <div className="animate-fadeIn">
+                    <h2 className="text-xl font-bold text-gray-900 mb-6 border-b pb-2 border-gray-200">Returns & Refunds</h2>
+                    <div className="bg-white shadow-lg rounded-xl overflow-hidden p-6 border border-gray-100 transition-all duration-300 hover:shadow-xl">
                       <div className="text-center py-12">
-                        <MdOutlineLocalShipping className="mx-auto h-12 w-12 text-gray-300" />
-                        
-                        <h3 className="mt-2 text-sm font-medium text-gray-900">Coming Soon</h3>
+                        <div className="mx-auto h-24 w-24 bg-indigo-50 rounded-full flex items-center justify-center mb-4">
+                          <MdOutlineLocalShipping className="h-12 w-12 text-indigo-300" />
+                        </div>
+                        <h3 className="mt-2 text-lg font-medium text-gray-900">Coming Soon</h3>
                         <p className="mt-1 text-sm text-gray-500">This feature is currently under development</p>
                       </div>
                     </div>
@@ -828,13 +840,14 @@ export default function ProfileContent() {
                 )}
 
                 {activeTab === 'reviews' && (
-                  <div>
-                    <h2 className="text-lg font-medium text-gray-900 mb-4">My Reviews</h2>
-                    <div className="bg-white shadow overflow-hidden sm:rounded-lg p-6">
+                  <div className="animate-fadeIn">
+                    <h2 className="text-xl font-bold text-gray-900 mb-6 border-b pb-2 border-gray-200">My Reviews</h2>
+                    <div className="bg-white shadow-lg rounded-xl overflow-hidden p-6 border border-gray-100 transition-all duration-300 hover:shadow-xl">
                       <div className="text-center py-12">
-                        <MdOutlineRateReview className="mx-auto h-12 w-12 text-gray-300" />
-                        
-                        <h3 className="mt-2 text-sm font-medium text-gray-900">Coming Soon</h3>
+                        <div className="mx-auto h-24 w-24 bg-indigo-50 rounded-full flex items-center justify-center mb-4">
+                          <MdOutlineRateReview className="h-12 w-12 text-indigo-300" />
+                        </div>
+                        <h3 className="mt-2 text-lg font-medium text-gray-900">Coming Soon</h3>
                         <p className="mt-1 text-sm text-gray-500">This feature is currently under development</p>
                       </div>
                     </div>
@@ -842,13 +855,14 @@ export default function ProfileContent() {
                 )}
 
                 {activeTab === 'support' && (
-                  <div>
-                    <h2 className="text-lg font-medium text-gray-900 mb-4">Help & Support</h2>
-                    <div className="bg-white shadow overflow-hidden sm:rounded-lg p-6">
+                  <div className="animate-fadeIn">
+                    <h2 className="text-xl font-bold text-gray-900 mb-6 border-b pb-2 border-gray-200">Help & Support</h2>
+                    <div className="bg-white shadow-lg rounded-xl overflow-hidden p-6 border border-gray-100 transition-all duration-300 hover:shadow-xl">
                       <div className="text-center py-12">
-                        <BiSupport className="mx-auto h-12 w-12 text-gray-300" />
-                        
-                        <h3 className="mt-2 text-sm font-medium text-gray-900">Coming Soon</h3>
+                        <div className="mx-auto h-24 w-24 bg-indigo-50 rounded-full flex items-center justify-center mb-4">
+                          <BiSupport className="h-12 w-12 text-indigo-300" />
+                        </div>
+                        <h3 className="mt-2 text-lg font-medium text-gray-900">Coming Soon</h3>
                         <p className="mt-1 text-sm text-gray-500">This feature is currently under development</p>
                       </div>
                     </div>

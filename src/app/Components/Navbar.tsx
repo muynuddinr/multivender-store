@@ -129,7 +129,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className={`fixed top-0 w-full z-50 transition-all duration-500 backdrop-blur-sm ${isScrolled ? 'bg-white/95 shadow-lg py-2' : 'bg-white/80 py-4'}`}>
+    <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${isScrolled ? 'bg-white shadow-lg py-2' : 'bg-white py-4'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
           {/* Logo and brand */}
@@ -304,19 +304,26 @@ const Navbar: React.FC = () => {
               )}
             </div>
 
-            {/* Cart */}
+            {/* Cart - Enhanced */}
             <div className="relative">
-              <Link href="/cart" className="text-gray-700 hover:text-indigo-600 transition-all duration-200 p-2 rounded-full hover:bg-indigo-50 hover:shadow-sm relative">
-                <FiShoppingCart className="h-5 w-5" />
-                {cartItemCount > 0 && (
-                  <motion.span 
-                    initial={{ scale: 0.8 }}
-                    animate={{ scale: 1 }}
-                    className="absolute -top-1.5 -right-1.5 bg-gradient-to-r from-indigo-600 to-purple-700 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center shadow-md"
-                  >
-                    {cartItemCount}
-                  </motion.span>
-                )}
+              <Link 
+                href="/cart" 
+                className="flex items-center justify-center h-10 w-10 rounded-full bg-gray-50 hover:bg-indigo-50 text-gray-700 hover:text-indigo-600 transition-all duration-300 hover:shadow-md relative group"
+                aria-label="Shopping cart"
+              >
+                <div className="relative">
+                  <FiShoppingCart className="h-5 w-5 transition-transform duration-300 group-hover:scale-110" />
+                  {cartItemCount > 0 && (
+                    <motion.span 
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ type: "spring", stiffness: 500, damping: 25 }}
+                      className="absolute -top-2.5 -right-2.5 bg-gradient-to-r from-indigo-600 to-purple-700 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center shadow-md border border-white group-hover:ring-2 ring-indigo-100"
+                    >
+                      {cartItemCount}
+                    </motion.span>
+                  )}
+                </div>
               </Link>
             </div>
 
