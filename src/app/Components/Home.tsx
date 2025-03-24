@@ -13,7 +13,7 @@ const Home = () => {
   // Hero slider data
   const heroSlides = [
     {
-      image: "/images/hero-1.jpg",
+      image: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=1920&h=1080&fit=crop",
       title: "Discover Unique Products",
       description: "From local artisans and global brands",
       buttonText: "Shop Now",
@@ -21,7 +21,7 @@ const Home = () => {
       color: "from-indigo-600 to-purple-700",
     },
     {
-      image: "/images/hero-2.jpg",
+      image: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=1920&h=1080&fit=crop",
       title: "Summer Collection 2023",
       description: "Refresh your style with seasonal trends",
       buttonText: "Explore",
@@ -29,7 +29,7 @@ const Home = () => {
       color: "from-pink-600 to-red-500",
     },
     {
-      image: "/images/hero-3.jpg",
+      image: "https://images.unsplash.com/photo-1607083206968-13611e3d76db?q=80&w=1920&h=1080&fit=crop",
       title: "Special Offers",
       description: "Up to 50% off on selected items",
       buttonText: "View Deals",
@@ -40,12 +40,12 @@ const Home = () => {
 
   // Featured categories
   const categories = [
-    { name: "Men", image: "/images/category-men.jpg", link: "/men" },
-    { name: "Women", image: "/images/category-women.jpg", link: "/women" },
-    { name: "Kids", image: "/images/category-kids.jpg", link: "/kids" },
-    { name: "Accessories", image: "/images/category-accessories.jpg", link: "/accessories" },
-    { name: "Electronics", image: "/images/category-electronics.jpg", link: "/electronics" },
-    { name: "Home & Kitchen", image: "/images/category-home.jpg", link: "/home-kitchen" },
+    { name: "Men", image: "https://images.unsplash.com/photo-1617137968427-85924c800a22?q=80&w=300&h=300", link: "/men" },
+    { name: "Women", image: "https://images.unsplash.com/photo-1581044777550-4cfa60707c03?q=80&w=300&h=300", link: "/women" },
+    { name: "Kids", image: "https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?q=80&w=300&h=300", link: "/kids" },
+    { name: "Accessories", image: "https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?q=80&w=300&h=300", link: "/accessories" },
+    { name: "Electronics", image: "https://images.unsplash.com/photo-1550009158-9ebf69173e03?q=80&w=300&h=300", link: "/electronics" },
+    { name: "Home & Kitchen", image: "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=300&h=300", link: "/home-kitchen" },
   ];
 
   // Featured products (sample data)
@@ -54,7 +54,7 @@ const Home = () => {
       id: 1,
       name: "Premium Leather Jacket",
       price: 199.99,
-      image: "/images/product-1.jpg",
+      image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80&w=500&h=500&fit=crop",
       rating: 4.8,
       reviews: 124,
       seller: "LeatherCraft Co.",
@@ -64,7 +64,7 @@ const Home = () => {
       id: 2,
       name: "Wireless Noise Cancelling Headphones",
       price: 149.99,
-      image: "/images/product-2.jpg",
+      image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=500&h=500&fit=crop",
       rating: 4.7,
       reviews: 89,
       seller: "AudioTech",
@@ -74,7 +74,7 @@ const Home = () => {
       id: 3,
       name: "Smart Fitness Watch",
       price: 99.99,
-      image: "/images/product-3.jpg",
+      image: "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?q=80&w=500&h=500&fit=crop",
       rating: 4.5,
       reviews: 76,
       seller: "GadgetHub",
@@ -84,7 +84,7 @@ const Home = () => {
       id: 4,
       name: "Handcrafted Ceramic Vase",
       price: 59.99,
-      image: "/images/product-4.jpg",
+      image: "https://images.unsplash.com/photo-1612196808214-b1b39ce6b29c?q=80&w=500&h=500&fit=crop",
       rating: 4.9,
       reviews: 42,
       seller: "ArtisanDecor",
@@ -94,7 +94,7 @@ const Home = () => {
       id: 5,
       name: "Organic Cotton T-Shirt",
       price: 29.99,
-      image: "/images/product-5.jpg",
+      image: "https://images.unsplash.com/photo-1581655353564-df123a1eb820?q=80&w=500&h=500&fit=crop",
       rating: 4.6,
       reviews: 118,
       seller: "EcoApparel",
@@ -104,7 +104,7 @@ const Home = () => {
       id: 6,
       name: "Professional Kitchen Knife Set",
       price: 89.99,
-      image: "/images/product-6.jpg",
+      image: "https://images.unsplash.com/photo-1593618998160-854542445a81?q=80&w=500&h=500&fit=crop",
       rating: 4.8,
       reviews: 65,
       seller: "CulinaryExperts",
@@ -114,7 +114,7 @@ const Home = () => {
       id: 7,
       name: "Handmade Leather Wallet",
       price: 49.99,
-      image: "/images/product-7.jpg",
+      image: "https://images.unsplash.com/photo-1627123424574-724758594e93?q=80&w=500&h=500&fit=crop",
       rating: 4.7,
       reviews: 53,
       seller: "LeatherCraft Co.",
@@ -124,7 +124,7 @@ const Home = () => {
       id: 8,
       name: "Portable Bluetooth Speaker",
       price: 79.99,
-      image: "/images/product-8.jpg",
+      image: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?q=80&w=500&h=500&fit=crop",
       rating: 4.6,
       reviews: 87,
       seller: "AudioTech",
@@ -134,11 +134,11 @@ const Home = () => {
   
   // Featured sellers/brands
   const featuredSellers = [
-    { name: "LeatherCraft Co.", logo: "/images/brand-1.jpg", products: 128 },
-    { name: "EcoApparel", logo: "/images/brand-2.jpg", products: 96 },
-    { name: "GadgetHub", logo: "/images/brand-3.jpg", products: 215 },
-    { name: "ArtisanDecor", logo: "/images/brand-4.jpg", products: 64 },
-    { name: "AudioTech", logo: "/images/brand-5.jpg", products: 108 },
+    { name: "LeatherCraft Co.", logo: "https://images.unsplash.com/photo-1634712282287-14ed57b9cc89?q=80&w=150&h=150&fit=crop", products: 128 },
+    { name: "EcoApparel", logo: "https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?q=80&w=150&h=150&fit=crop", products: 96 },
+    { name: "GadgetHub", logo: "https://images.unsplash.com/photo-1606663889134-b1dedb5ed8b7?q=80&w=150&h=150&fit=crop", products: 215 },
+    { name: "ArtisanDecor", logo: "https://images.unsplash.com/photo-1592492152545-9695d3f473f4?q=80&w=150&h=150&fit=crop", products: 64 },
+    { name: "AudioTech", logo: "https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=150&h=150&fit=crop", products: 108 },
   ];
   
   // Testimonials
@@ -147,21 +147,21 @@ const Home = () => {
       id: 1,
       name: "Sarah Johnson",
       role: "Regular Customer",
-      image: "/images/testimonial-1.jpg",
+      image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=100&h=100&fit=crop",
       text: "I love shopping at MULTI-STORE! The variety of products from different sellers gives me so many options. The quality is always great and delivery is prompt."
     },
     {
       id: 2,
       name: "Michael Chen",
       role: "Verified Buyer",
-      image: "/images/testimonial-2.jpg",
+      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=100&h=100&fit=crop",
       text: "As someone who values unique items, this marketplace is a treasure trove. I've discovered so many small businesses with amazing products I wouldn't find elsewhere."
     },
     {
       id: 3,
       name: "Priya Sharma",
       role: "Fashion Enthusiast",
-      image: "/images/testimonial-3.jpg",
+      image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=100&h=100&fit=crop",
       text: "The curated collections make it easy to find exactly what I'm looking for. Customer service is excellent, and returns are hassle-free when needed."
     }
   ];
@@ -433,7 +433,7 @@ const Home = () => {
             <div className="lg:w-1/2 flex justify-center">
               <div className="w-72 h-72 lg:w-96 lg:h-96 relative">
                 <Image 
-                  src="/images/sale-banner.jpg" 
+                  src="https://images.unsplash.com/photo-1607083206968-13611e3d76db?q=80&w=768&h=768&fit=crop" 
                   alt="Summer Sale" 
                   fill
                   style={{ objectFit: 'contain' }}
@@ -595,28 +595,39 @@ const Home = () => {
                 Download our mobile app for a seamless shopping experience. Get exclusive app-only deals and notifications.
               </p>
               <div className="flex flex-wrap gap-4">
-                <Link href="#" className="inline-block">
-                  <Image
-                    src="/images/app-store-badge.png"
-                    alt="Download on App Store"
-                    width={140}
-                    height={42}
-                  />
+                <Link href="#" className="inline-block bg-black px-4 py-2 rounded-lg text-white font-medium hover:bg-gray-800">
+                  <div className="flex items-center">
+                    <div className="mr-2">
+                      <svg viewBox="0 0 24 24" width="24" height="24" fill="white">
+                        <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.18 14.7 3.15 5.3 9.34 5.05c1.56.06 2.66.95 3.5.95.85 0 2.37-1.16 4.13-.95 1.55.14 2.88.8 3.66 2.24-3.3 2.13-2.77 6.18.58 7.68-.52 1.68-1.3 3.35-2.16 4.28v.03z" />
+                        <path d="M12.03 4.95c-.26-1.73.55-3.22 1.7-4.1 1.2 1.1 1.83 2.84 1.5 4.12-1.24.08-2.77-.8-3.2-.02z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <div className="text-xs">Download on the</div>
+                      <div className="text-base font-semibold">App Store</div>
+                    </div>
+                  </div>
                 </Link>
-                <Link href="#" className="inline-block">
-                  <Image
-                    src="/images/google-play-badge.png"
-                    alt="Get it on Google Play"
-                    width={140}
-                    height={42}
-                  />
+                <Link href="#" className="inline-block bg-black px-4 py-2 rounded-lg text-white font-medium hover:bg-gray-800">
+                  <div className="flex items-center">
+                    <div className="mr-2">
+                      <svg viewBox="0 0 24 24" width="24" height="24" fill="white">
+                        <path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 01-.61-.92V2.734a1 1 0 01.609-.92zm10.89 5.26l2.3-1.336-2.658-1.54-2.621 2.633 2.979.243zm.004 9.856l2.978-.242-2.621-2.633-2.656 1.54 2.299 1.335zm-3.827-3.537l-2.687-8.118-2.694 4.665 5.38 3.453zm0 2.313l-5.38 3.453 2.694 4.665 2.686-8.118z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <div className="text-xs">GET IT ON</div>
+                      <div className="text-base font-semibold">Google Play</div>
+                    </div>
+                  </div>
                 </Link>
               </div>
             </div>
             <div className="md:w-1/2 flex justify-center md:justify-end">
               <div className="w-64 h-auto relative">
                 <Image
-                  src="/images/app-mockup.png"
+                  src="https://images.unsplash.com/photo-1565538420870-da08ff96a207?q=80&w=256&h=512&fit=crop"
                   alt="Multi-Store Mobile App"
                   width={256}
                   height={512}
