@@ -1,14 +1,13 @@
-import CustomerLogin from "./customer-login";
 import Navbar from "../Components/Navbar";
+import SellerLoginForm from "./seller-login";
 import Footer from "../Components/Footer";
 
-export default function CustomerLoginPage() {
+export default function SellerLogin() {
   return (
-    <>
+    <div>
       <Navbar />
-      <CustomerLogin />
+      <SellerLoginForm />
       <Footer />
-    </>
+    </div>
   );
 }
-
