@@ -97,7 +97,7 @@ const Navbar: React.FC = () => {
           {/* Logo and brand */}
           <div className="flex items-center">
             <Link href="/" className="font-bold text-xl text-black">
-              STORE
+              MULTI-STORE
             </Link>
           </div>
 
